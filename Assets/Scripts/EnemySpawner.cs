@@ -22,27 +22,30 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameTime += Time.deltaTime;
-        if (spawnChance < 100)
+        if (!StoreScript.Instance.storeOpen)
         {
-            spawnChance += gameTime * 0.0001f;
-            
-        }
-        if (spawnTime > 2)
-        {
-            spawnTime -= gameTime * 0.00001f;
-        }
-
-        random = Random.Range(1, 100);
-
-        timer -= Time.deltaTime;
-        if (timer <= 0)
-        {
-            timer = spawnTime;
-            if (random <= spawnChance)
+            gameTime += Time.deltaTime;
+            if (spawnChance < 100)
             {
-                Instantiate(enemy, transform.position, Quaternion.identity);
+                spawnChance += gameTime * 0.0001f;
+
             }
-        }        
+            if (spawnTime > 2)
+            {
+                spawnTime -= gameTime * 0.00001f;
+            }
+
+            random = Random.Range(1, 100);
+
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                timer = spawnTime;
+                if (random <= spawnChance)
+                {
+                    Instantiate(enemy, transform.position, Quaternion.identity);
+                }
+            }
+        }
     }
 }

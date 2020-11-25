@@ -60,13 +60,14 @@ public class ShootingScript : MonoBehaviour
                 for (int i = 0; i < bullets; i++)
                 {
                     float bulletAngle = Random.Range(shotgunSpread.x, shotgunSpread.y);
-                    Instantiate(bullet, transform.position, transform.parent.rotation * Quaternion.Euler(0f, 0f, bulletAngle));
-                    
+                    GameObject shotBullet = Instantiate(bullet, transform.position, transform.parent.rotation * Quaternion.Euler(0f, 0f, bulletAngle));
+                    shotBullet.GetComponent<BulletScript>().instantiatedByPlayer = true;
                 }
             }
             else
             {
-                Instantiate(bullet, transform.position, transform.parent.rotation);
+                GameObject shotBullet = Instantiate(bullet, transform.position, transform.parent.rotation);
+                shotBullet.GetComponent<BulletScript>().instantiatedByPlayer = true;
             }
             timer = fireRate;
         }   

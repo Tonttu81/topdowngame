@@ -149,8 +149,13 @@ MonoBehaviour:
   moveSpeed: 3
   baseXpReward: 50
   baseScoreReward: 10
+  bulletSpeed: 30
+  bulletDamage: 10
+  bulletLife: 1
+  fireRate: 1
   floatingTextPrefab: {fileID: 2283941495230224392, guid: 353b74b8163355f4fb2ab07c3379daa6,
     type: 3}
+  bullet: {fileID: 2522800880886978859, guid: 86aae87316b1a2344b44f15ec3f3a298, type: 3}
 --- !u!114 &-5109056752270868319
 MonoBehaviour:
   m_ObjectHideFlags: 0

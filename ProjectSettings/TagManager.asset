@@ -11,8 +11,9 @@ TagManager:
   - RiflePowerUp
   - SniperPowerUp
   - GrenadeLauncher
-  - HealthBarUI
   - GlobalVars
+  - StoreUI
+  - WorldSpaceUI
   layers:
   - Default
   - TransparentFX

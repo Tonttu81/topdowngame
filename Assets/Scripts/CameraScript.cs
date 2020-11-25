@@ -25,12 +25,15 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        zoom = Mathf.Clamp(zoom - Input.mouseScrollDelta.y, cameraSizeMin, cameraSizeMax);
-        cam.m_Lens.OrthographicSize = Mathf.Clamp(zoom, cameraSizeMin, cameraSizeMax);
         if (player != null)
         {
+            cameraSizeMax = cameraSizeMin + player.GetComponentInChildren<ShootingScript>().bulletPenetration;
             transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10f);
         }
+
+        zoom = Mathf.Clamp(zoom - Input.mouseScrollDelta.y, cameraSizeMin, cameraSizeMax);
+        cam.m_Lens.OrthographicSize = Mathf.Clamp(zoom, cameraSizeMin, cameraSizeMax);
+        
 
         if (timer > 0)
         {
@@ -42,11 +45,6 @@ public class CameraScript : MonoBehaviour
                 cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
             }
         }
-    }
-
-    private void FixedUpdate()
-    {
-        
     }
 
     public void ShakeCamera(float magnitude, float time)

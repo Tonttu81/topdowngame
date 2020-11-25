@@ -13,7 +13,7 @@ public class HpBar : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        canvas = GameObject.FindGameObjectWithTag("HealthBarUI");
+        canvas = GameObject.FindGameObjectWithTag("WorldSpaceUI");
         hpBar = Instantiate(hpBarPrefab, transform.position - new Vector3(0f, 1f), Quaternion.identity, canvas.transform);
     }
 

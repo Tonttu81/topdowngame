@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GlobalVars : MonoBehaviour
 {
-    public static GlobalVars Instance;
+    public static GlobalVars Instance { get; private set; }
     public float score;
     public float money;
 
@@ -18,6 +18,8 @@ public class GlobalVars : MonoBehaviour
     Image fade;
 
     GameObject player;
+
+    public GameObject floatingTextPrefab;
 
     // Start is called before the first frame update
     void Awake()
@@ -81,5 +83,15 @@ public class GlobalVars : MonoBehaviour
     public float LoadVars()
     {   
         return score;
+    }
+
+    // Luo leijuvan tekstin. Jos gravity on true, teksti lentää satunnaiseen suuntaan painovoima päällä. Jos gravity on false, leijuu suoraan ylöspäin hitaasti
+    public void InstantiateText(string textInf, Vector3 position, bool gravity)  
+    {
+        GameObject floatingText = Instantiate(floatingTextPrefab, position, Quaternion.identity);
+        FloatingTextScript floatingTextScript = floatingText.GetComponent<FloatingTextScript>();
+        floatingTextScript.text.text = textInf;
+        floatingTextScript.textGravity = gravity;
+        floatingTextScript.notLaunched = gravity;
     }
 }

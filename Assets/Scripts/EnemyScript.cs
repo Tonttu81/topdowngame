@@ -10,9 +10,19 @@ public class EnemyScript : MonoBehaviour
     public float baseXpReward;
     public float baseScoreReward;
 
+    float gameTime; // Vastustajat scalee ajalla
+    [SerializeField]float timer;
+
+    // Shooting properties
+    public float bulletSpeed;
+    public float bulletDamage;
+    public float bulletLife;
+    public float fireRate;
+
     GameObject player;
     PlayerScript playerScript;
     public GameObject floatingTextPrefab;
+    public GameObject bullet;
 
     // Start is called before the first frame update
     void Awake()
@@ -24,13 +34,17 @@ public class EnemyScript : MonoBehaviour
     {
         if (player != null)
         {
-            playerScript = player.GetComponent<PlayerScript>();
-            if (!StoreScript.Instance.storeOpen)
-            {
-                Vector2 dir = player.transform.position - transform.position;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0f, 0f, angle);
-            }
+            RotateTowardsPlayer();
+        }
+
+        if (timer <= 0)
+        {
+            Shoot();
+        }
+
+        if (timer > 0)
+        {
+            timer -= Time.deltaTime;
         }
     }
 
@@ -46,9 +60,30 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
+    void Shoot()
+    {
+        GameObject shotBullet = Instantiate(bullet, transform.position, transform.rotation);
+        shotBullet.GetComponent<BulletScript>().instantiatedByPlayer = false;
+        timer = fireRate;
+    }
+
+    void RotateTowardsPlayer()
+    {
+        playerScript = player.GetComponent<PlayerScript>();
+        if (!StoreScript.Instance.storeOpen)
+        {
+            Vector2 dir = player.transform.position - transform.position;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
+    }
+
     public void TakeDamage(float damage)
     {
         hp -= damage;
+
+        GlobalVars.Instance.InstantiateText("-" + damage.ToString("F2"), transform.position, true);
+
         if (hp <= 0)
         {
             playerScript.xp += baseXpReward / playerScript.level;
@@ -61,13 +96,11 @@ public class EnemyScript : MonoBehaviour
                     playerScript.scoreMultiplier *= 2;
                 }
             }
-            GameObject xp = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
-            xp.GetComponent<FloatingTextScript>().text.text = "+" + (baseXpReward / playerScript.level).ToString("F2") + "xp";
-            if (xp != null)
-            {
-                Destroy(GetComponent<HpBar>().hpBar);
-                Destroy(gameObject);
-            } 
+
+            GlobalVars.Instance.InstantiateText("+" + (baseXpReward / playerScript.level).ToString("F2") + "xp", transform.position, false);
+
+            Destroy(GetComponent<HpBar>().hpBar);
+            Destroy(gameObject);
         }
     }
 

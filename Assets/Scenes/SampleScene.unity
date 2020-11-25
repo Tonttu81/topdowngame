@@ -4852,6 +4852,8 @@ MonoBehaviour:
   startFade: 0
   fadeScene: 0
   fadeTime: 1
+  floatingTextPrefab: {fileID: 2283941495230224392, guid: 353b74b8163355f4fb2ab07c3379daa6,
+    type: 3}
 --- !u!114 &967185927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8628,7 +8630,7 @@ GameObject:
   - component: {fileID: 2125745000}
   m_Layer: 5
   m_Name: WorldSpaceUI
-  m_TagString: HealthBarUI
+  m_TagString: WorldSpaceUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
