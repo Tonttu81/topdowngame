@@ -4,16 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - ShotgunPowerUp
   - Bullet
   - Enemy
-  - ExplosiveBullets
-  - RiflePowerUp
-  - SniperPowerUp
-  - GrenadeLauncher
   - GlobalVars
   - StoreUI
   - WorldSpaceUI
+  - RiflePowerUp
+  - SniperPowerUp
+  - GrenadeLauncher
+  - ExplosiveBullets
   layers:
   - Default
   - TransparentFX

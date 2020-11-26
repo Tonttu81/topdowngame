@@ -18,7 +18,6 @@ public class StoreScript : MonoBehaviour
 
     public TextMeshProUGUI pointCounter;
     public PlayerScript playerScript;
-    Button[] buttons;
 
     public ShootingScript shootingScript;
     public GameObject stats;
@@ -30,14 +29,9 @@ public class StoreScript : MonoBehaviour
         Instance = this;
         volume.profile.TryGetSettings(out dof);
         store = GetComponentInChildren<CanvasGroup>();
-        buttons = store.gameObject.GetComponentsInChildren<Button>();
         statTexts = stats.GetComponentsInChildren<TextMeshProUGUI>();
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            //print(buttons[i]);
-            //print(statTexts[i]);
-        }
     }
+
 
     // Update is called once per frame
     void Update()
@@ -85,17 +79,11 @@ public class StoreScript : MonoBehaviour
         if (storeOpen)
         {
             store.alpha += fadeTime * Time.deltaTime;
-            for (int i = 0; i < buttons.Length; i++)
-            {
-                // vaiha highlight väri punaseks jos pointsit ei riitä, vihreäks jos riittää
-            }
         }
         else
         {
             store.alpha -= fadeTime * Time.deltaTime;
         }
-
-        
     }
 
     void OpenStore()

@@ -25,7 +25,7 @@ public class HpBar : MonoBehaviour
         {
             hp.value = GetComponent<EnemyScript>().hp;
         }
-        else
+        else if (gameObject.tag == "Player")
         {
             hp.value = GetComponent<PlayerScript>().hp;
         }

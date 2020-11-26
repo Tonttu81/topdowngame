@@ -24,9 +24,10 @@ public class PlayerScript : MonoBehaviour
     {
         if (xp >= 100) // Jos on tarpeeksi xp, saa levelin
         {
+            float remainder = xp - 100;
+            xp = 0 + remainder;
             storePoints++;
             level++;
-            xp = 0;
         }
     }
 
