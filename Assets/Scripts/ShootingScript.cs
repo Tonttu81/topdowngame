@@ -17,6 +17,7 @@ public class ShootingScript : MonoBehaviour
     public float fireRate;
     public bool grenadeLauncher;
 
+
     public float timer;
 
     public GameObject explosion;
@@ -72,7 +73,6 @@ public class ShootingScript : MonoBehaviour
             timer = fireRate;
         }   
     }
-        
 
     public void ShotgunPowerUp() 
     {
@@ -90,7 +90,7 @@ public class ShootingScript : MonoBehaviour
 
     public void ExplosiveBulletsPowerUp()
     {
-        int cost = 1;
+        int cost = 3;
         if (cost <= playerScript.storePoints)
         {
             playerScript.storePoints -= cost;
@@ -103,18 +103,19 @@ public class ShootingScript : MonoBehaviour
 
     public void GrenadeLauncherPowerUp()
     {
-        int cost = 1;
-        if (cost <= playerScript.storePoints)
+        int cost = 5;
+        if (!grenadeLauncher)
         {
-            playerScript.storePoints -= cost;
-            if (!grenadeLauncher)
+            if (cost <= playerScript.storePoints)
             {
+                playerScript.storePoints -= cost;
                 grenadeLauncher = true;
                 bulletSpeed *= 0.7f;
                 explosiveBullets += 2;
                 explosionRadius = 3f;
             }
         }
+        
         // Kun saat kranaatinheittimen, ammuksesi räjähtävät kun ne osuvat vastustajaan, ja rähäjdyksistä tulee lisää räjähdyksiä, riippuen siitä kuinka monta
         // räjähtävää ammusta olet kerännyt. Ammuksesi kulkevat hitaammin
     }

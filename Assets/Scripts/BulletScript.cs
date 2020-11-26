@@ -8,6 +8,11 @@ public class BulletScript : MonoBehaviour
     int penetrations;
     public bool instantiatedByPlayer;
 
+    float bulletSpeed;
+    float bulletDamage;
+    float bulletLife;
+    int bulletPenetration;
+
     bool loaded;
 
     Rigidbody2D rb2D;
@@ -26,12 +31,12 @@ public class BulletScript : MonoBehaviour
     {
         if (!loaded)
         {
-            GetInstantiator();
+            GetBulletStats();
         }
 
         if (!StoreScript.Instance.storeOpen)
         {
-            SetVelocity();
+            rb2D.velocity = transform.right * bulletSpeed;
 
             if (timer > 0)
             {
@@ -48,6 +53,56 @@ public class BulletScript : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag != "Bullet")
+        {
+            if (instantiatedByPlayer)
+            {
+                if (collision.tag != "Player")
+                {
+                    if (collision.tag == "Enemy")
+                    {
+                        HitEnemy(collision);
+                    }
+                }
+            }
+            else
+            {
+                if (collision.tag != "Enemy")
+                {
+                    if (collision.tag == "Player")
+                    {
+                        HitPlayer(collision);
+                    }
+                }
+            }
+        }
+    }
+
+    void GetBulletStats()
+    {
+        if (instantiatedByPlayer)
+        {
+            shootingScript = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<ShootingScript>();
+            bulletDamage = shootingScript.bulletDamage;
+            bulletLife = shootingScript.bulletLife;
+            bulletPenetration = shootingScript.bulletPenetration;
+            bulletSpeed = shootingScript.bulletSpeed;
+            timer = shootingScript.bulletLife;
+        }
+        else
+        {
+            enemyScript = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyScript>();
+            bulletDamage = enemyScript.bulletDamage;
+            bulletLife = enemyScript.bulletLife;
+            bulletSpeed = enemyScript.bulletSpeed;
+            timer = enemyScript.bulletLife;
+        }
+        transform.localScale = new Vector3(bulletSpeed * 0.01f, transform.localScale.y);
+        loaded = true;
+    }
+
     void DestroyBullet()
     {
         if (instantiatedByPlayer)
@@ -61,66 +116,23 @@ public class BulletScript : MonoBehaviour
         }
     }
 
-    void SetVelocity()
+    void HitPlayer(Collider2D collision)
     {
-        if (instantiatedByPlayer)
-        {
-            rb2D.velocity = transform.right * shootingScript.bulletSpeed;
-        }
-        else
-        {
-            rb2D.velocity = transform.right * enemyScript.bulletSpeed;
-        }
-    }
-    
-    void GetInstantiator()
-    {
-        if (instantiatedByPlayer)
-        {
-            shootingScript = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<ShootingScript>();
-            transform.localScale = new Vector3(shootingScript.bulletSpeed * 0.01f, transform.localScale.y);
-            timer = shootingScript.bulletLife;
-        }
-        else
-        {
-            enemyScript = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyScript>();
-            transform.localScale = new Vector3(enemyScript.bulletSpeed * 0.01f, transform.localScale.y);
-            timer = enemyScript.bulletLife;
-        }
-        loaded = true;
+        PlayerScript playerScriptInstance = collision.GetComponent<PlayerScript>();
+        playerScriptInstance.TakeDamage(enemyScript.bulletDamage);
+        Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void HitEnemy(Collider2D collision)
     {
-        if (instantiatedByPlayer)
+        penetrations++;
+        EnemyScript enemyScriptInstance = collision.GetComponent<EnemyScript>();
+        enemyScriptInstance.TakeDamage(shootingScript.bulletDamage);
+        Instantiate(explosion, transform.position, Quaternion.identity);
+        if (penetrations > shootingScript.bulletPenetration)
         {
-            if (collision.tag != "Player" || collision.tag != "Bullet")
-            {
-                if (collision.tag == "Enemy")
-                {
-                    penetrations++;
-                    EnemyScript enemyScriptInstance = collision.GetComponent<EnemyScript>();
-                    enemyScriptInstance.TakeDamage(shootingScript.bulletDamage);
-                    Instantiate(explosion, transform.position, Quaternion.identity);
-                    if (penetrations > shootingScript.bulletPenetration)
-                    {
-                        Destroy(gameObject);
-                    }
-                }
+            Destroy(gameObject);
+        }
 
-            }
-        }
-        else
-        {
-            if (collision.tag != "Enemy" || collision.tag != "Bullet")
-            {
-                if (collision.tag == "Player")
-                {
-                    PlayerScript playerScriptInstance = collision.GetComponent<PlayerScript>();
-                    playerScriptInstance.TakeDamage(enemyScript.bulletDamage);
-                    Destroy(gameObject);
-                }
-            }
-        }
     }
 }
