@@ -11,6 +11,8 @@ public class PlayerScript : MonoBehaviour
     public float scoreMultiplier;
     public int killStreak;
     public int storePoints;
+
+    
     
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,11 @@ public class PlayerScript : MonoBehaviour
             xp = 0 + remainder;
             storePoints++;
             level++;
+        }
+
+        if (Input.GetButton("Dash"))
+        {
+            // Ability
         }
     }
 

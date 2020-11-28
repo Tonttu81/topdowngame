@@ -15,6 +15,7 @@ public class GlobalVars : MonoBehaviour
     public float fadeTime;
     string targetScene;
 
+
     Image fade;
 
     GameObject player;

@@ -32,19 +32,22 @@ public class EnemyScript : MonoBehaviour
 
     void Update()
     {
-        if (player != null)
+        if (!StoreScript.Instance.storeOpen)
         {
-            RotateTowardsPlayer();
-        }
+            if (player != null)
+            {
+                RotateTowardsPlayer();
+            }
 
-        if (timer <= 0)
-        {
-            Shoot();
-        }
+            if (timer <= 0)
+            {
+                Shoot();
+            }
 
-        if (timer > 0)
-        {
-            timer -= Time.deltaTime;
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+            }
         }
     }
 
