@@ -85,7 +85,7 @@ public class EnemyScript : MonoBehaviour
     {
         hp -= damage;
 
-        GlobalVars.Instance.InstantiateText("-" + damage.ToString("F2"), transform.position, true);
+        GlobalVars.Instance.InstantiateText("-" + damage.ToString("F2"), transform.position, true, 1);
 
         if (hp <= 0)
         {
@@ -100,7 +100,7 @@ public class EnemyScript : MonoBehaviour
                 }
             }
 
-            GlobalVars.Instance.InstantiateText("+" + (baseXpReward / playerScript.level).ToString("F2") + "xp", transform.position, false);
+            GlobalVars.Instance.InstantiateText("+" + (baseXpReward / playerScript.level).ToString("F2") + "xp", transform.position, false, 1);
 
             Destroy(GetComponent<HpBar>().hpBar);
             Destroy(gameObject);

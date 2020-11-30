@@ -15,6 +15,12 @@ public class GlobalVars : MonoBehaviour
     public float fadeTime;
     string targetScene;
 
+    Vector3 direction;
+    float timer;
+    float dashDuration;
+
+    public UnityEngine.Events.UnityAction selectedAbility;
+
 
     Image fade;
 
@@ -66,6 +72,14 @@ public class GlobalVars : MonoBehaviour
                 }
             }
         }
+
+        /*
+        if (timer < dashDuration)
+        {
+            Vector3 position = Mathf.Lerp(player.transform.position, direction, timer / dashDuration);
+            timer += Time.deltaTime;
+        }
+        */
     }
 
 
@@ -87,12 +101,34 @@ public class GlobalVars : MonoBehaviour
     }
 
     // Luo leijuvan tekstin. Jos gravity on true, teksti lentää satunnaiseen suuntaan painovoima päällä. Jos gravity on false, leijuu suoraan ylöspäin hitaasti
-    public void InstantiateText(string textInf, Vector3 position, bool gravity)  
+    public void InstantiateText(string textInf, Vector3 position, bool gravity, float fontSize)  
     {
         GameObject floatingText = Instantiate(floatingTextPrefab, position, Quaternion.identity);
         FloatingTextScript floatingTextScript = floatingText.GetComponent<FloatingTextScript>();
         floatingTextScript.text.text = textInf;
         floatingTextScript.textGravity = gravity;
         floatingTextScript.notLaunched = gravity;
+        floatingTextScript.text.fontSize = fontSize;
+    }
+
+    // Player abilities
+    public void Shield()
+    {
+        print("Shield");
+    }
+
+    public void Healthpack()
+    {
+        float heal = 50f;
+        player.GetComponent<PlayerScript>().hp += heal;
+        InstantiateText("+" + heal, player.transform.position, false, 1);
+    }
+
+    public void Dash()
+    {
+        direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        // Dash in the direction
+
+        print("Dash");
     }
 }

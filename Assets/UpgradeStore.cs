@@ -9,28 +9,15 @@ class Ability
     public string name;
     public float cost;
     public UnityEngine.Events.UnityAction method;
+    public bool bought;
 
 
-    public Ability(string _name, float _cost, UnityEngine.Events.UnityAction _method)
+    public Ability(string _name, float _cost, UnityEngine.Events.UnityAction _method, bool _bought)
     {
         name = _name;
         cost = _cost;
         method = _method;
-    }
-
-    public void Shield()
-    {
-
-    }
-
-    public void HealthPack()
-    {
-
-    }
-    
-    public void Dash()
-    {
-
+        bought = _bought;
     }
 }
 
@@ -53,50 +40,114 @@ public class UpgradeStore : MonoBehaviour
         {
             buttons[i].onClick.AddListener(abilities[i].method); // Laittaa napille metodin
             TextMeshProUGUI text = buttons[i].gameObject.GetComponentInChildren<TextMeshProUGUI>(); // Ottaa napin tekstin
-            text.text = abilities[i].name + ":  " + abilities[i].cost + "€";
+            text.text = abilities[i].name + ":  " + abilities[i].cost + "€"; // Vaihtaa tekstin
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        globalVars = GameObject.FindGameObjectWithTag("GlobalVars").GetComponent<GlobalVars>();
+
         for (int i = 0; i < abilities.Length; i++)
         {
-            if (globalVars.money < abilities[i].cost)
+            if (!abilities[i].bought) // Jos abilityä ei ole ostettu vielä
             {
-                ColorBlock colors = buttons[i].colors;
-                colors.highlightedColor = Color.red;
-                buttons[i].colors = colors;
+                if (globalVars.money < abilities[i].cost) // Jos pelaajalla ei riitä rahat abilityyn, hightlight color on punainen
+                {
+                    ColorBlock colors = buttons[i].colors;
+                    colors.highlightedColor = Color.red;
+                    buttons[i].colors = colors;
+                }
+                else // Jos riittää rahat, highlight väri on vihreä
+                {
+                    ColorBlock colors = buttons[i].colors;
+                    colors.highlightedColor = Color.green;
+                    buttons[i].colors = colors;
+                }
             }
-            else
+            else // Jos ability on ostettu
             {
-                ColorBlock colors = buttons[i].colors;
-                colors.highlightedColor = Color.green;
-                buttons[i].colors = colors;
+                if (abilities[i].method.Method.Name == globalVars.selectedAbility.Method.Name) // Jos ability on valittu, väri on musta
+                {
+                    ColorBlock colors = buttons[i].colors;
+                    buttons[i].GetComponent<Image>().color = Color.black;
+                    colors.highlightedColor = Color.black;
+                    buttons[i].colors = colors;
+                }
+                else // Jos ability ei ole valittu, väri on valkoinen
+                {
+                    ColorBlock colors = buttons[i].colors;
+                    buttons[i].GetComponent<Image>().color = Color.white;
+                    colors.highlightedColor = Color.white;
+                    buttons[i].colors = colors;
+                }
             }
         }
     }
 
     void LoadAbilities()
     {
-        abilities[0] = new Ability("Shield", 5000, Shield);
-        abilities[1] = new Ability("Healthpack", 10000, Healthpack);
-        abilities[2] = new Ability("Dash", 600, Dash);
+        abilities[0] = new Ability("Shield", 1, Shield, false);
+        abilities[1] = new Ability("Healthpack", 1, Healthpack, false);
+        abilities[2] = new Ability("Dash", 1, Dash, false);
     }
 
     // Tää seuraavaks
     void Shield()
     {
-        print("shield");
+        float cost = abilities[0].cost;
+        if (cost <= globalVars.money && !abilities[0].bought) // Jos pelaajalla riittää rahat abilityyn ja abilityä ei ole vielä ostettu
+        {
+            globalVars.money -= cost; // Vähentää pelaajalta raha
+            abilities[0].bought = true;
+            globalVars.selectedAbility = globalVars.Shield;
+        }
+        else if (cost > globalVars.money && !abilities[0].bought) // Jos pelaajalla ei riitä rahat ja abilityä ei ole vielä ostettu
+        {
+            globalVars.InstantiateText("Not enough money!", Input.mousePosition, false, 30); // Näyttää "Not enough money!" tekstin
+        }
+        else if (abilities[0].bought) // Jos ability on ostettu ja pelaaja klikkaa sitä
+        {
+            globalVars.selectedAbility = globalVars.Shield; // Laittaa abilityn selectedAbilityksi
+        }
     }
 
     void Healthpack()
     {
-        print("healthpack");
+        float cost = abilities[1].cost;
+        if (cost <= globalVars.money && !abilities[1].bought)
+        {
+            globalVars.money -= cost;
+            abilities[1].bought = true;
+            globalVars.selectedAbility = globalVars.Healthpack;
+        }
+        else if (cost > globalVars.money && !abilities[1].bought)
+        {
+            globalVars.InstantiateText("Not enough money!", Input.mousePosition, false, 30);
+        }
+        else if (abilities[1].bought)
+        {
+            globalVars.selectedAbility = globalVars.Healthpack;
+        }
     }
 
     void Dash()
     {
-        print("dash");
+        float cost = abilities[2].cost;
+        if (cost <= globalVars.money && !abilities[2].bought)
+        {
+            globalVars.money -= cost;
+            abilities[2].bought = true;
+            globalVars.selectedAbility = globalVars.Dash;
+        }
+        else if (cost > globalVars.money && !abilities[2].bought)
+        {
+            globalVars.InstantiateText("Not enough money!", Input.mousePosition, false, 30);
+        }
+        else if (abilities[2].bought)
+        {
+            globalVars.selectedAbility = globalVars.Dash;
+        }
     }
 }

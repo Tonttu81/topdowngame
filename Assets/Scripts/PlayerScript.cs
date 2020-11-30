@@ -31,10 +31,14 @@ public class PlayerScript : MonoBehaviour
             storePoints++;
             level++;
         }
-
-        if (Input.GetButton("Dash"))
+        if (hp > 100)
         {
-            // Ability
+            hp = 100;
+        }
+
+        if (Input.GetButtonDown("Dash"))
+        {
+            GlobalVars.Instance.selectedAbility?.Invoke();
         }
     }
 
@@ -43,10 +47,12 @@ public class PlayerScript : MonoBehaviour
         hp -= damage;
         scoreMultiplier = 1;
         killStreak = 0;
+        GlobalVars.Instance.InstantiateText("-" + damage, transform.position, true, 1);
         CameraScript.Instance.ShakeCamera(10f, 0.1f);
         if (hp <= 0)
         {
             GlobalVars.Instance.SaveVars();
+            GlobalVars.Instance.selectedAbility = null;
             Destroy(GetComponent<HpBar>().hpBar);
             Destroy(gameObject);
         }
