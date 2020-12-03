@@ -36,7 +36,7 @@ public class PlayerScript : MonoBehaviour
             hp = 100;
         }
 
-        if (Input.GetButtonDown("Dash"))
+        if (Input.GetButtonDown("Ability"))
         {
             GlobalVars.Instance.selectedAbility?.Invoke();
         }

@@ -18,6 +18,7 @@ public class GlobalVars : MonoBehaviour
     Vector3 direction;
     float timer;
     float dashDuration;
+    bool dashing;
 
     public UnityEngine.Events.UnityAction selectedAbility;
 
@@ -72,14 +73,6 @@ public class GlobalVars : MonoBehaviour
                 }
             }
         }
-
-        /*
-        if (timer < dashDuration)
-        {
-            Vector3 position = Mathf.Lerp(player.transform.position, direction, timer / dashDuration);
-            timer += Time.deltaTime;
-        }
-        */
     }
 
 
@@ -127,6 +120,7 @@ public class GlobalVars : MonoBehaviour
     public void Dash()
     {
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        dashing = true;
         // Dash in the direction
 
         print("Dash");
